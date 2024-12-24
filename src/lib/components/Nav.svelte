@@ -49,7 +49,7 @@
   <div class="navbar-end">
     <label class="swap swap-rotate">
       <!-- this hidden checkbox controls the state -->
-      <input type="checkbox" class="theme-controller" value="coffee" />
+      <input type="checkbox" class="theme-controller" value="valentine" />
     
       <!-- sun icon -->
       <svg
@@ -71,3 +71,4 @@
     </label>
   </div>
 </div>
+<div class="divider"></div>
