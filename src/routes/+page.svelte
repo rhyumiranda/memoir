@@ -2,6 +2,7 @@
 	import {onMount} from 'svelte';
 	let quoteDataGenerated = null;
 	let dailyQuoteData = null;
+	let quoteWizardDataGenerated = null;
 
 	const scrollToResults = () => {
     setTimeout(() => {
@@ -29,8 +30,21 @@
 		try {
 			const response = await fetch(`/api/quote/${mood}`);
 			const data = await response.json();
+			quoteWizardDataGenerated = null;
 			quoteDataGenerated = data;
 			console.log(data);
+		} catch (error) {
+			console.error('Error fetching quote:', error);
+		}
+	};
+
+	const fetchWizardQuote = async () => {
+		try {
+			const response = await fetch(`/api/quote/wizard`);
+			const data = await response.json();
+			quoteDataGenerated = null;
+			quoteWizardDataGenerated = data;
+			scrollToResults();
 		} catch (error) {
 			console.error('Error fetching quote:', error);
 		}
@@ -74,6 +88,9 @@
 				{#if quoteDataGenerated}
 					<p class="text-sm md:text-2xl">"{quoteDataGenerated[0].q}"</p>
 					<p>— {quoteDataGenerated[0].a}</p>
+				{:else if quoteWizardDataGenerated}
+					<p class="text-sm md:text-2xl">"{quoteWizardDataGenerated.quote}"</p>
+					<p>— {quoteWizardDataGenerated.speaker}</p>
 				{:else}
 					<pre class="font-mono whitespace-pre-wrap break-words text-left leading-4 text-[8px] sm:text-xs md:text-sm lg:text-base overflow-x-auto">
 						✧･ﾟ: *✧･ﾟ:* 　　*:･ﾟ✧*:･ﾟ✧ 	⸜(｡˃ ᵕ ˂ )⸝♡   ✧･ﾟ: *✧･ﾟ:* 　　*:･ﾟ✧*:･ﾟ✧
@@ -233,6 +250,24 @@
 						</div>
 					</div>
 				</div>
+			</div>
+
+			<div class="flex w-full flex-col gap-2 md:flex-row md:gap-0">
+				<div class="card grid w-full flex-grow rounded-box bg-base-300 md:w-10">
+					<figure class="aspect-square relative overflow-hidden">
+						<img src="/Wizard.png" alt="Anxiety" class="h-full w-full object-cover transition-transform hover:scale-110"/>
+					</figure>
+					<div class="card-body">
+						<h2 class="card-title">Missing Harry Potter?</h2>
+						<p>This is a bonus incase you'd miss parts on one of your faves Harry Potter ! 🧙‍♂️</p>
+						<div class="card-actions justify-end">
+							<button onclick={() => fetchWizardQuote()} class="btn btn-primary"
+								>Blast a Spell</button
+							>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>
